@@ -3,7 +3,7 @@ var canvas, ctx, saveButton, clearButton;
 var pos = {x:0, y:0};
 var rawImage;
 var model;
-	
+
 function getModel() {
 	model = tf.sequential();
 
@@ -24,7 +24,7 @@ async function train(model, data) {
 	const metrics = ['loss', 'val_loss', 'accuracy', 'val_accuracy'];
 	const container = { name: 'Model Training', styles: { height: '640px' } };
 	const fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
-  
+
 	const BATCH_SIZE = 512;
 	const TRAIN_DATA_SIZE = 5500;
 	const TEST_DATA_SIZE = 1000;
@@ -58,7 +58,7 @@ function setPosition(e){
 	pos.x = e.clientX-100;
 	pos.y = e.clientY-100;
 }
-    
+
 function draw(e) {
 	if(e.buttons!=1) return;
 	ctx.beginPath();
@@ -71,22 +71,22 @@ function draw(e) {
 	ctx.stroke();
 	rawImage.src = canvas.toDataURL('image/png');
 }
-    
+
 function erase() {
 	ctx.fillStyle = "black";
 	ctx.fillRect(0,0,280,280);
 }
-    
+
 function save() {
 	var raw = tf.browser.fromPixels(rawImage,1);
 	var resized = tf.image.resizeBilinear(raw, [28,28]);
 	var tensor = resized.expandDims(0);
     var prediction = model.predict(tensor);
     var pIndex = tf.argMax(prediction, 1).dataSync();
-    
+
 	alert(pIndex);
 }
-    
+
 function init() {
 	canvas = document.getElementById('canvas');
 	rawImage = document.getElementById('canvasimg');
@@ -103,7 +103,7 @@ function init() {
 }
 
 
-async function run() {  
+async function run() {
 	const data = new MnistData();
 	await data.load();
 	const model = getModel();
@@ -114,7 +114,3 @@ async function run() {
 }
 
 document.addEventListener('DOMContentLoaded', run);
-
-
-
-    
